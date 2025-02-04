@@ -19,12 +19,12 @@ logger = logging.getLogger(__name__)
 
 
 def start(update: Update, context: CallbackContext):
-    "Start messaging bot"
+    """Start messaging bot"""
     context.bot.send_message(chat_id=update.effective_chat.id, text="Здравствуйте")
 
 
 def echo(update: Update, context: CallbackContext):
-    "Func Echo return  user message"
+    """Func Echo return  user message"""
     context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
 
 
@@ -39,31 +39,30 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
     session = session_client.session_path(project_id, session_id)
     print("Session path: {}\n".format(session))
 
-    for text in texts:
-        text_input = dialogflow.TextInput(text=text, language_code=language_code)
+    text_input = dialogflow.TextInput(text=texts, language_code=language_code)
 
-        query_input = dialogflow.QueryInput(text=text_input)
+    query_input = dialogflow.QueryInput(text=text_input)
 
-        response = session_client.detect_intent(
-            request={"session": session, "query_input": query_input}
+    response = session_client.detect_intent(
+        request={"session": session, "query_input": query_input}
+    )
+
+    print("=" * 20)
+    print("Query text: {}".format(response.query_result.query_text))
+    print(
+        "Detected intent: {} (confidence: {})\n".format(
+            response.query_result.intent.display_name,
+            response.query_result.intent_detection_confidence,
         )
-
-        print("=" * 20)
-        print("Query text: {}".format(response.query_result.query_text))
-        print(
-            "Detected intent: {} (confidence: {})\n".format(
-                response.query_result.intent.display_name,
-                response.query_result.intent_detection_confidence,
-            )
-        )
-        print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
+    )
+    print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
 
 
 def main(token: str, GOOGLE_PROJECT_ID: str, GOOGLE_LANGUAGE_CODE: str):
     """Main function running code"""
     project_id = GOOGLE_PROJECT_ID
     session_id = "test-sess"
-    texts = ["Привет"]
+    texts = "Привет"
     language_code = GOOGLE_LANGUAGE_CODE
     detect_intent_texts(project_id, session_id, texts, language_code)
 
