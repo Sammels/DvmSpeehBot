@@ -25,7 +25,13 @@ def start(update: Update, context: CallbackContext):
 
 def echo(update: Update, context: CallbackContext):
     """Func Echo return  user message"""
-    context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
+    project_id = GOOGLE_PROJECT_ID
+    session_id = "test-sess"
+    language_code = GOOGLE_LANGUAGE_CODE
+
+    text_update = detect_intent_texts(project_id, session_id, update.message.text, language_code)
+
+    context.bot.send_message(chat_id=update.effective_chat.id, text=text_update)
 
 
 def detect_intent_texts(project_id, session_id, texts, language_code):
@@ -49,33 +55,23 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
 
     print("=" * 20)
     print("Query text: {}".format(response.query_result.query_text))
-    print(
-        "Detected intent: {} (confidence: {})\n".format(
-            response.query_result.intent.display_name,
-            response.query_result.intent_detection_confidence,
-        )
-    )
     print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
+    return response.query_result.fulfillment_text
 
 
 def main(token: str, GOOGLE_PROJECT_ID: str, GOOGLE_LANGUAGE_CODE: str):
     """Main function running code"""
-    project_id = GOOGLE_PROJECT_ID
-    session_id = "test-sess"
-    texts = "Привет"
-    language_code = GOOGLE_LANGUAGE_CODE
-    detect_intent_texts(project_id, session_id, texts, language_code)
 
-    # updater = Updater(token=token)
-    # dispatcher = updater.dispatcher
+    updater = Updater(token=token)
+    dispatcher = updater.dispatcher
 
-    # start_handler = CommandHandler("start", start)
-    # dispatcher.add_handler(start_handler)
+    start_handler = CommandHandler("start", start)
+    dispatcher.add_handler(start_handler)
 
-    # echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
-    # dispatcher.add_handler(echo_handler)
+    echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
+    dispatcher.add_handler(echo_handler)
 
-    # updater.start_polling()
+    updater.start_polling()
 
 
 if __name__ == "__main__":
