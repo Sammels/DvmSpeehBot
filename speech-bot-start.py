@@ -29,7 +29,9 @@ def echo(update: Update, context: CallbackContext):
     session_id = "test-sess"
     language_code = GOOGLE_LANGUAGE_CODE
 
-    text_update = detect_intent_texts(project_id, session_id, update.message.text, language_code)
+    text_update = detect_intent_texts(
+        project_id, session_id, update.message.text, language_code
+    )
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=text_update)
 
