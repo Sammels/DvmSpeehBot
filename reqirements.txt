@@ -4,8 +4,9 @@ environs==14.1.0
 # Codestyle
 black==25.1.0
 
-# Librarys
+# Libs
 python-telegram-bot==13.15
 six==1.16.0
 urllib3==1.26.16
-google-cloud-dialogflow==2.38.0 
+google-cloud-dialogflow==2.38.0
+vk_api==11.9.9
