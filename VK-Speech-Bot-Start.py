@@ -4,7 +4,7 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 
 env.read_env()
 VK_GROUP_TOKEN = env("VK_GROUP_TOKEN")
-print(VK_GROUP_TOKEN)
+
 
 vk_session = vk_api.VkApi(token=VK_GROUP_TOKEN)
 
