@@ -54,9 +54,6 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
         request={"session": session, "query_input": query_input}
     )
 
-    print("=" * 20)
-    print("Query text: {}".format(response.query_result.query_text))
-    print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
     return response.query_result.fulfillment_text
 
 

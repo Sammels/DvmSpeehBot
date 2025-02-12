@@ -25,8 +25,6 @@ def open_json(objects):
     return load_questions
 
 
-
-
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
     """Create an intent of the given intent type."""
     from google.cloud import dialogflow
@@ -41,7 +39,7 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
         training_phrase = dialogflow.Intent.TrainingPhrase(parts=[part])
         training_phrases.append(training_phrase)
 
-    text = dialogflow.Intent.Message.Text(text=message_texts)
+    text = dialogflow.Intent.Message.Text(text=[message_texts])
     message = dialogflow.Intent.Message(text=text)
 
     intent = dialogflow.Intent(
@@ -60,15 +58,14 @@ def main():
     Run main module script
     """
     fills = open_json("questions")
+
     for testing in fills:
-        print (type(fills[testing]['answer']))
-
-    # for testing in fills:
-    #     create_intent(GOOGLE_PROJECT_ID, testing, 
-    #         fills[testing]['questions'],
-    #         fills[testing]['answer'])
-
-
+        create_intent(
+            GOOGLE_PROJECT_ID,
+            testing,
+            fills[testing]["questions"],
+            fills[testing]["answer"],
+        )
 
 
 if __name__ == "__main__":
