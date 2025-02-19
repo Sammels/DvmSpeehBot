@@ -23,8 +23,8 @@ def start(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Здравствуйте")
 
 
-def echo(update: Update, context: CallbackContext):
-    """Func Echo return  user message"""
+def response_message(update: Update, context: CallbackContext):
+    """Func Echo return  user message."""
     project_id = GOOGLE_PROJECT_ID
     session_id = "test-sess"
     language_code = GOOGLE_LANGUAGE_CODE
@@ -58,7 +58,7 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
 
 
 def main(token: str):
-    """Main function running code"""
+    """Main function running code."""
 
     updater = Updater(token=token)
     dispatcher = updater.dispatcher
@@ -66,7 +66,7 @@ def main(token: str):
     start_handler = CommandHandler("start", start)
     dispatcher.add_handler(start_handler)
 
-    echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
+    echo_handler = MessageHandler(Filters.text & (~Filters.command), response_message)
     dispatcher.add_handler(echo_handler)
 
     updater.start_polling()

@@ -6,6 +6,8 @@ import json
 
 from environs import env
 
+from google.cloud import dialogflow
+
 
 def open_json(objects):
     """
@@ -27,7 +29,6 @@ def open_json(objects):
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
     """Create an intent of the given intent type."""
-    from google.cloud import dialogflow
 
     intents_client = dialogflow.IntentsClient()
 
@@ -51,6 +52,30 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
     )
 
     print("Intent created: {}".format(response))
+
+
+
+# TODO: Отрефакторить, чтобы запускался их этого модуля, не изменяя дату.
+# def detect_intent_texts(project_id, session_id, texts, language_code):
+#     """Returns the result of detect intent with texts as inputs.
+
+#     Using the same `session_id` between requests allows continuation
+#     of the conversation."""
+
+#     session_client = dialogflow.SessionsClient()
+
+#     session = session_client.session_path(project_id, session_id)
+#     print("Session path: {}\n".format(session))
+#     text_input = dialogflow.TextInput(text=texts, language_code=language_code)
+
+#     query_input = dialogflow.QueryInput(text=text_input)
+
+#     response = session_client.detect_intent(
+#         request={"session": session, "query_input": query_input}
+#     )
+
+#     return response.query_result.fulfillment_text
+
 
 
 def main():
