@@ -24,9 +24,10 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
     response = session_client.detect_intent(
         request={"session": session, "query_input": query_input}
     )
-    
-    if not response.query_result.intent.is_fallback:
 
+    if response.query_result.intent.is_fallback:
+        return None
+    else:
         return response.query_result.fulfillment_text
 
 
@@ -36,9 +37,12 @@ def echo(event, vk_api):
     language_code = GOOGLE_LANGUAGE_CODE
 
     text_update = detect_intent_texts(project_id, session_id, event.text, language_code)
-    vk_api.messages.send(
-        user_id=event.user_id, message=text_update, random_id=random.randint(1, 1000)
-    )
+    if text_update is not None:
+        vk_api.messages.send(
+            user_id=event.user_id,
+            message=text_update,
+            random_id=random.randint(1, 1000),
+        )
 
 
 if __name__ == "__main__":
