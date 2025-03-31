@@ -1,7 +1,3 @@
-"""
-Задача открыть файл.
-"""
-
 import json
 
 from environs import env
@@ -56,6 +52,7 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
 
 
 # TODO: Отрефакторить, чтобы запускался их этого модуля, не изменяя дату.
+
 # def detect_intent_texts(project_id, session_id, texts, language_code):
 #     """Returns the result of detect intent with texts as inputs.
 
@@ -74,7 +71,10 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
 #         request={"session": session, "query_input": query_input}
 #     )
 
-#     return response.query_result.fulfillment_text
+#     if response.query_result.intent.is_fallback:
+#         return None
+#     else:
+#         return response.query_result.fulfillment_text
 
 
 
