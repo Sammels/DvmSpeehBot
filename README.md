@@ -35,9 +35,37 @@ pip3 install -r requirements.txt
 ```bash
 touch .env
 ```
-внести туда токен
+внести туда токены
 ```
+TG_BOT_LOGGER_TOKEN=Токен, для доступа к ТГ бот-Логгеру.
+TG_CHAT_ID= ID чата, куда ТГ бот-Логгер будет сыпать сообщения об ошибках.
 TELEGRAM_TOKEN=Токен полученный из п.1
+VK_GROUP_TOKEN=Персональный токен для доступа к группе вк, которая будет отвечать на вопросы пользователей.
+GOOGLE_APPLICATION_CREDENTIALS=Путь к JSONфайлу полученнопу по инструкции "Установка Diagflow т Google"
+PROJECT_ID=Название проекта в DiagFlow google
+LANGUAGE_CODE=ru-RU
 ```
 
 ### Установка Dialogflow от Google
+
+1. Cоздайте проект в Google Cloud, используя [документацию](https://cloud.google.com/dialogflow/es/docs/quick/setup). 
+2. Cоздайте диалогового агента, который будет выполнять основную работу по общению с пользователем, используя [документацию](https://cloud.google.com/dialogflow/es/docs/quick/build-agent). 
+3. Для обращения к сервису через API понадобится JSON-ключ, необходимый для авторизаци. Подробнее [здесь](https://cloud.google.com/docs/authentication/api-keys).
+
+
+
+
+### Как работают боты.
+
+`Написать как запускаеься тг и вк бот.`
+
+
+Примеры работы ботов:
+
+![vk_bot](./demo_vk_bot.gif)
+
+Ссылка на vk-бота [здесь](https://vk.com/club229354790).
+
+![tg_bot](./demo_tg_bot.gif)
+
+Ссылка на telegram-бота [здесь](https://t.me/SammelsDevmanSpeechbot).
