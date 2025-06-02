@@ -31,29 +31,16 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
     print("Intent created: {}".format(response))
 
 
-def open_json(objects):
-    """
-    Open JSON file in project folder.
-
-
-    Args:
-            objects (str): filename
-
-    Returns:
-            dict : files
-    """
-    with open(f"{objects}.json", "r", encoding="utf-8") as file:
-        questions_json = file.read()
-
-    load_questions = json.loads(questions_json)
-    return load_questions
-
-
 def main():
     """
     Run main module script
     """
-    files = open_json("questions")
+    json_filename = "questions"
+
+    with open(f"{json_filename}.json", "r", encoding="utf-8") as file:
+        questions_json = file.read()
+
+    files = json.loads(questions_json)
 
     for intent in files:
         create_intent(
