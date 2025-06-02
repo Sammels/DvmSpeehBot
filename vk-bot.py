@@ -5,7 +5,7 @@ from environs import env
 import vk_api as vk
 from vk_api.longpoll import VkLongPoll, VkEventType
 
-from diagflow_working_script import detect_intent_text
+from DvmSpeehBot.diagflow_script import detect_intent_text
 from logs import TelegramLogsHandler
 
 

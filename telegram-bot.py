@@ -10,7 +10,7 @@ from telegram.ext import (
     CallbackContext,
 )
 from logs import TelegramLogsHandler
-from diagflow_working_script import detect_intent_text
+from diagflow_script import detect_intent_text
 
 
 logger = logging.getLogger('tg_bot')
