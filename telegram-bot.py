@@ -23,9 +23,9 @@ def start(update: Update, context: CallbackContext):
 
 def response_message(update: Update, context: CallbackContext):
     """Func return  user message."""
-    project_id = GOOGLE_PROJECT_ID
+    project_id = google_project_id
     session_id = "test-sess"
-    language_code = GOOGLE_LANGUAGE_CODE
+    language_code = google_language_code
 
     text_update = detect_intent_text(
         project_id, session_id, update.message.text, language_code
@@ -43,10 +43,10 @@ def main(token: str):
         format="%(asctime)s - %(name)s - %(levelname)s- %(message)s", level=logging.INFO
     )
     logger.setLevel(logging.DEBUG)
-    logger.addHandler(TelegramLogsHandler(TELEGRAM_LOGGER, TELEGRAM_LOGER_CHAT_ID))
+    logger.addHandler(TelegramLogsHandler(telegram_logger, telegram_logger_chat_id))
     logger.info("Bot start")
     try:
-        updater = Updater(token=TELEGRAM_TOKEN)
+        updater = Updater(token=telegramm_token)
         dispatcher = updater.dispatcher
         dispatcher.add_handler(CommandHandler("start", start))
         dispatcher.add_handler(
@@ -61,10 +61,10 @@ def main(token: str):
 
 if __name__ == "__main__":
     env.read_env()
-    TELEGRAM_TOKEN = env("TELEGRAM_TOKEN")
-    TELEGRAM_LOGGER = env("TG_BOT_LOGGER_TOKEN")
-    TELEGRAM_LOGER_CHAT_ID = env("TG_CHAT_ID")
-    GOOGLE_PROJECT_ID = env("PROJECT_ID")
-    GOOGLE_LANGUAGE_CODE = env("LANGUAGE_CODE")
+    telegramm_token = env("TELEGRAM_TOKEN")
+    telegram_logger = env("TG_BOT_LOGGER_TOKEN")
+    telegram_logger_chat_id = env("TG_CHAT_ID")
+    google_project_id = env("PROJECT_ID")
+    google_language_code = env("LANGUAGE_CODE")
 
-    main(TELEGRAM_TOKEN)
+    main(telegramm_token)

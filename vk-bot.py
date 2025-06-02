@@ -13,9 +13,9 @@ logger = logging.getLogger("vk_bot")
 
 
 def perform_intent(event, vk_api):
-    project_id = GOOGLE_PROJECT_ID
+    project_id = google_project_id
     session_id = "test-sess"
-    language_code = GOOGLE_LANGUAGE_CODE
+    language_code = google_language_code
 
     text_update = detect_intent_text(project_id, session_id, event.text, language_code)
     if text_update is not None:
@@ -48,10 +48,10 @@ def main(tg_logger, tg_logger_chat, vk_group):
 
 if __name__ == "__main__":
     env.read_env()
-    VK_GROUP_TOKEN = env("VK_GROUP_TOKEN")
-    TELEGRAM_LOGGER = env("TG_BOT_LOGGER_TOKEN")
-    TELEGRAM_LOGER_CHAT_ID = env("TG_CHAT_ID")
-    GOOGLE_PROJECT_ID = env("PROJECT_ID")
-    GOOGLE_LANGUAGE_CODE = env("LANGUAGE_CODE")
+    vk_group_token = env("VK_GROUP_TOKEN")
+    telegramm_logger = env("TG_BOT_LOGGER_TOKEN")
+    telegramm_logger_chat_id = env("TG_CHAT_ID")
+    google_project_id = env("PROJECT_ID")
+    google_language_code = env("LANGUAGE_CODE")
 
-    main(TELEGRAM_LOGGER, TELEGRAM_LOGER_CHAT_ID, VK_GROUP_TOKEN)
+    main(telegramm_logger, telegramm_logger_chat_id, vk_group_token)
