@@ -13,7 +13,7 @@ from logs import TelegramLogsHandler
 from diagflow_script import detect_intent_text
 
 
-logger = logging.getLogger('tg_bot')
+logger = logging.getLogger("tg_bot")
 
 
 def start(update: Update, context: CallbackContext):
@@ -39,10 +39,24 @@ def response_message(update: Update, context: CallbackContext):
 def main(token: str):
     """Main function running code."""
 
-    echo_handler = MessageHandler(Filters.text & (~Filters.command), response_message)
-    dispatcher.add_handler(echo_handler)
+    logging.basicConfig(
+        format="%(asctime)s - %(name)s - %(levelname)s- %(message)s", level=logging.INFO
+    )
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(TelegramLogsHandler(TELEGRAM_LOGGER, TELEGRAM_LOGER_CHAT_ID))
+    logger.info("Bot start")
+    try:
+        updater = Updater(token=TELEGRAM_TOKEN)
+        dispatcher = updater.dispatcher
+        dispatcher.add_handler(CommandHandler("start", start))
+        dispatcher.add_handler(
+            MessageHandler(Filters.text & (~Filters.command), response_message)
+        )
 
-
+        updater.start_polling()
+        updater.idle()
+    except Exception as err:
+        logging.error(err, exc_info=True)
 
 
 if __name__ == "__main__":
@@ -53,19 +67,4 @@ if __name__ == "__main__":
     GOOGLE_PROJECT_ID = env("PROJECT_ID")
     GOOGLE_LANGUAGE_CODE = env("LANGUAGE_CODE")
 
-    
-    logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s- %(message)s", level=logging.INFO)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(TelegramLogsHandler(TELEGRAM_LOGGER, TELEGRAM_LOGER_CHAT_ID))
-    logger.info('Bot start')
-    try:
-        updater = Updater(token=TELEGRAM_TOKEN)
-        dispatcher = updater.dispatcher
-        dispatcher.add_handler(CommandHandler("start", start))
-        dispatcher.add_handler(MessageHandler(Filters.text & (~Filters.command), response_message))
-
-        updater.start_polling()
-        updater.idle()
-    except Exception as err:
-        logging.error(err, exc_info=True)
+    main(TELEGRAM_TOKEN)
