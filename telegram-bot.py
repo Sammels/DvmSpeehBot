@@ -23,13 +23,14 @@ def start(update: Update, context: CallbackContext):
 
 def response_message(update: Update, context: CallbackContext):
     """Func return  user message."""
-    project_id = google_project_id
-    session_id = "test-sess"
-    language_code = google_language_code
-
+    chat_id = update.message.chat_id
+    
     text_update = detect_intent_text(
-        project_id, session_id, update.message.text, language_code
-    )
+        project_id=env("PROJECT_ID"),
+        session_id= chat_id,
+        text=update.message.text, 
+        language_code=env("LANGUAGE_CODE")
+        )
 
     context.bot.send_message(
         chat_id=update.effective_chat.id, text=text_update[0].encode().decode()
@@ -64,7 +65,5 @@ if __name__ == "__main__":
     telegramm_token = env("TELEGRAM_TOKEN")
     telegram_logger = env("TG_BOT_LOGGER_TOKEN")
     telegram_logger_chat_id = env("TG_CHAT_ID")
-    google_project_id = env("PROJECT_ID")
-    google_language_code = env("LANGUAGE_CODE")
 
     main(telegramm_token)

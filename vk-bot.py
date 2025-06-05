@@ -5,19 +5,21 @@ from environs import env
 import vk_api as vk
 from vk_api.longpoll import VkLongPoll, VkEventType
 
-from DvmSpeehBot.diagflow_script import detect_intent_text
+from diagflow_script import detect_intent_text
 from logs import TelegramLogsHandler
 
 
 logger = logging.getLogger("vk_bot")
 
 
-def perform_intent(event, vk_api):
-    project_id = google_project_id
-    session_id = "test-sess"
-    language_code = google_language_code
+def perform_intent(event, vk_api, project_id):
 
-    text_update = detect_intent_text(project_id, session_id, event.text, language_code)
+    text_update = detect_intent_text(
+        project_id=project_id,
+        session_id=event.user_id,
+        text=event.text,
+        language_code="ru",
+    )
     if text_update is not None:
         vk_api.messages.send(
             user_id=event.user_id,
@@ -26,7 +28,8 @@ def perform_intent(event, vk_api):
         )
 
 
-def main(tg_logger, tg_logger_chat, vk_group):
+def main(tg_logger, tg_logger_chat, vk_group, google_project_id):
+    project_id=google_project_id
     logging.basicConfig(
         format="%(asctime)s - %(funcName)s -  %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO,
@@ -41,7 +44,8 @@ def main(tg_logger, tg_logger_chat, vk_group):
 
         for event in longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                perform_intent(event, vk_api)
+                perform_intent(event, vk_api,project_id)
+                
     except Exception as err:
         logger.error(err, exc_info=True)
 
@@ -54,4 +58,4 @@ if __name__ == "__main__":
     google_project_id = env("PROJECT_ID")
     google_language_code = env("LANGUAGE_CODE")
 
-    main(telegramm_logger, telegramm_logger_chat_id, vk_group_token)
+    main(telegramm_logger, telegramm_logger_chat_id, vk_group_token,google_project_id)
