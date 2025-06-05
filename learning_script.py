@@ -38,14 +38,14 @@ def main():
     with open(f"{json_filename}.json", "r", encoding="utf-8") as file:
         questions_json = file.read()
 
-    files = json.loads(questions_json)
+    intents = json.loads(questions_json)
 
-    for intent in files:
+    for intent in intents:
         create_intent(
             GOOGLE_PROJECT_ID,
             intent,
-            files[intent]["questions"],
-            files[intent]["answer"],
+            intents[intent]["questions"],
+            intents[intent]["answer"],
         )
         
 
