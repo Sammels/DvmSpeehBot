@@ -16,11 +16,3 @@ def detect_intent_text(project_id, session_id, text, language_code):
         response.query_result.intent.is_fallback,
     )
 
-
-def main():
-    env.read_env()
-    project_id = env.str("PROJECT_ID")
-
-
-if __name__ == "__main__":
-    main()
