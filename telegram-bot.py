@@ -27,10 +27,11 @@ def response_message(update: Update, context: CallbackContext):
     
     text_update = detect_intent_text(
         project_id=env("PROJECT_ID"),
-        session_id= chat_id,
+        session_id=f"tg-{chat_id}",
         text=update.message.text, 
         language_code=env("LANGUAGE_CODE")
         )
+    
 
     context.bot.send_message(
         chat_id=update.effective_chat.id, text=text_update[0].encode().decode()

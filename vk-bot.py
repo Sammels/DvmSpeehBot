@@ -13,10 +13,11 @@ logger = logging.getLogger("vk_bot")
 
 
 def perform_intent(event, vk_api, project_id):
+    session_id = "vk-{event.user_id}"
 
     text_update = detect_intent_text(
         project_id=project_id,
-        session_id=event.user_id,
+        session_id=session_id,
         text=event.text,
         language_code="ru",
     )

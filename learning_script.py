@@ -42,7 +42,7 @@ def main():
 
     for intent in intents:
         create_intent(
-            GOOGLE_PROJECT_ID,
+            google_project_id,
             intent,
             intents[intent]["questions"],
             intents[intent]["answer"],
@@ -53,5 +53,5 @@ def main():
 
 if __name__ == "__main__":
     env.read_env()
-    GOOGLE_PROJECT_ID = env("PROJECT_ID")
+    google_project_id = env("PROJECT_ID")
     main()
