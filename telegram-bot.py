@@ -1,6 +1,7 @@
 import logging
 
 from environs import env
+from functools import partial
 from telegram import Update, ForceReply
 from telegram.ext import (
     Updater,
@@ -21,49 +22,67 @@ def start(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Здравствуйте")
 
 
-def response_message(update: Update, context: CallbackContext):
+def response_message(
+    update: Update, context: CallbackContext, project_id, language_code
+):
     """Func return  user message."""
     chat_id = update.message.chat_id
-    
+
     text_update = detect_intent_text(
-        project_id=env("PROJECT_ID"),
-        session_id= chat_id,
-        text=update.message.text, 
-        language_code=env("LANGUAGE_CODE")
-        )
+        project_id=project_id,
+        session_id=f"tg-{chat_id}",
+        text=update.message.text,
+        language_code=language_code,
+    )
 
     context.bot.send_message(
         chat_id=update.effective_chat.id, text=text_update[0].encode().decode()
     )
 
 
-def main(token: str):
+def main():
     """Main function running code."""
+
+    env.read_env()
+    config = {
+        "telegramm_token": env("TELEGRAM_TOKEN"),
+        "telegram_logger": env("TG_BOT_LOGGER_TOKEN"),
+        "telegram_logger_chat_id": env("TG_CHAT_ID"),
+        "project_id": env("PROJECT_ID"),
+        "language_code": env("LANGUAGE_CODE"),
+    }
 
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s- %(message)s", level=logging.INFO
     )
     logger.setLevel(logging.DEBUG)
-    logger.addHandler(TelegramLogsHandler(telegram_logger, telegram_logger_chat_id))
+    logger.addHandler(
+        TelegramLogsHandler(
+            config["telegram_logger"], config["telegram_logger_chat_id"]
+        )
+    )
+
     logger.info("Bot start")
     try:
-        updater = Updater(token=telegramm_token)
+        updater = Updater(token=config["telegramm_token"])
         dispatcher = updater.dispatcher
         dispatcher.add_handler(CommandHandler("start", start))
         dispatcher.add_handler(
-            MessageHandler(Filters.text & (~Filters.command), response_message)
+            MessageHandler(
+                Filters.text & ~Filters.command,
+                partial(
+                    response_message,
+                    project_id=config["project_id"],
+                    language_code=config["language_code"],
+                ),
+            )
         )
 
         updater.start_polling()
         updater.idle()
-    except Exception as err:
-        logging.error(err, exc_info=True)
+    except Exception as error:
+        logging.exception("TG BOT DOWN!!!", error, exc_info=True)
 
 
 if __name__ == "__main__":
-    env.read_env()
-    telegramm_token = env("TELEGRAM_TOKEN")
-    telegram_logger = env("TG_BOT_LOGGER_TOKEN")
-    telegram_logger_chat_id = env("TG_CHAT_ID")
-
-    main(telegramm_token)
+    main()
