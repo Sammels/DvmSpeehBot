@@ -1,3 +1,4 @@
+import argparse
 import json
 
 from environs import env
@@ -28,17 +29,29 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
         request={"parent": parent, "intent": intent}
     )
 
+def create_parser():
+    parser = argparse.ArgumentParser(
+        prog="Create DialogFlow intents from json file",
+    )
+    parser.add_argument("filepath",
+                        nargs="?",
+                        help="You can spesify filepath to the intents' data in json format",
+                        default="../questions.json",
+                        )
+
+    return parser
+
 
 def main():
     """
     Run main module script
     """
-    json_filename = "questions"
+    parser = create_parser()
+    args = parser.parse_args()
+    with open(args.filepath, 'r') as intents_file:
+        intents = intents_file.read()
 
-    with open(f"{json_filename}.json", "r", encoding="utf-8") as file:
-        questions_json = file.read()
-
-    intents = json.loads(questions_json)
+    intents = json.loads(intents)
 
     for intent in intents:
         create_intent(
