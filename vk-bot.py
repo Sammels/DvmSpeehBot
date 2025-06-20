@@ -29,34 +29,34 @@ def perform_intent(event, vk_api, project_id):
         )
 
 
-def main(tg_logger, tg_logger_chat, vk_group, google_project_id):
-    project_id=google_project_id
-    logging.basicConfig(
-        format="%(asctime)s - %(funcName)s -  %(name)s - %(levelname)s - %(message)s",
-        level=logging.INFO,
-    )
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(TelegramLogsHandler(tg_logger, tg_logger_chat))
-    try:
-        logger.info("VK Bot run")
-        vk_session = vk.VkApi(token=vk_group)
-        vk_api = vk_session.get_api()
-        longpoll = VkLongPoll(vk_session)
+def main():
 
-        for event in longpoll.listen():
-            if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                perform_intent(event, vk_api,project_id)
-                
-    except Exception as err:
-        logger.error(err, exc_info=True)
-
-
-if __name__ == "__main__":
     env.read_env()
     vk_group_token = env("VK_GROUP_TOKEN")
     telegramm_logger = env("TG_BOT_LOGGER_TOKEN")
     telegramm_logger_chat_id = env("TG_CHAT_ID")
     google_project_id = env("PROJECT_ID")
     google_language_code = env("LANGUAGE_CODE")
+    
+    logging.basicConfig(
+        format="%(asctime)s - %(funcName)s -  %(name)s - %(levelname)s - %(message)s",
+        level=logging.INFO,
+    )
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(TelegramLogsHandler(telegramm_logger, telegramm_logger_chat_id))
+    try:
+        logger.info("VK Bot run")
+        vk_session = vk.VkApi(token=vk_group_token)
+        vk_api = vk_session.get_api()
+        longpoll = VkLongPoll(vk_session)
 
-    main(telegramm_logger, telegramm_logger_chat_id, vk_group_token,google_project_id)
+        for event in longpoll.listen():
+            if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+                perform_intent(event, vk_api,google_project_id)
+                
+    except Exception as err:
+        logger.error(err, exc_info=True)
+
+
+if __name__ == "__main__":
+    main()

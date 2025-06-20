@@ -38,8 +38,13 @@ def response_message(update: Update, context: CallbackContext):
     )
 
 
-def main(token: str):
+def main():
     """Main function running code."""
+
+    env.read_env()
+    telegramm_token = env("TELEGRAM_TOKEN")
+    telegram_logger = env("TG_BOT_LOGGER_TOKEN")
+    telegram_logger_chat_id = env("TG_CHAT_ID")
 
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s- %(message)s", level=logging.INFO
@@ -62,9 +67,4 @@ def main(token: str):
 
 
 if __name__ == "__main__":
-    env.read_env()
-    telegramm_token = env("TELEGRAM_TOKEN")
-    telegram_logger = env("TG_BOT_LOGGER_TOKEN")
-    telegram_logger_chat_id = env("TG_CHAT_ID")
-
-    main(telegramm_token)
+    main()
