@@ -32,24 +32,23 @@ def perform_intent(event, vk_api, project_id, language_code):
 def main():
 
     env.read_env()
-    config = {
-        "vk_group_token": env("VK_GROUP_TOKEN"),
-        "telegramm_logger": env("TG_BOT_LOGGER_TOKEN"),
-        "telegramm_logger_chat_id": env("TG_CHAT_ID"),
-        "google_project_id": env("PROJECT_ID"),
-        "google_language_code": env("LANGUAGE_CODE")
-    }
-
+    vk_group_token = env("VK_GROUP_TOKEN")
+    telegramm_logger = env("TG_BOT_LOGGER_TOKEN")
+    telegramm_logger_chat_id = env("TG_CHAT_ID")
+    google_project_id = env("PROJECT_ID")
+    google_language_code = env("LANGUAGE_CODE")
+    
     
     logging.basicConfig(
         format="%(asctime)s - %(funcName)s -  %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO,
     )
     logger.setLevel(logging.DEBUG)
-    logger.addHandler(TelegramLogsHandler(config["telegramm_logger"], config["telegramm_logger_chat_id"]))
+    logger.addHandler(TelegramLogsHandler(telegramm_logger, 
+                                          telegramm_logger_chat_id))
     try:
         logger.info("VK Bot run")
-        vk_session = vk.VkApi(token=config["vk_group_token"])
+        vk_session = vk.VkApi(token=vk_group_token)
         vk_api = vk_session.get_api()
         longpoll = VkLongPoll(vk_session)
 
@@ -57,14 +56,12 @@ def main():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
                 perform_intent(event, 
                                vk_api,
-                               config["google_project_id"],
-                               config["google_language_code"])
+                               google_project_id,
+                               google_language_code)
                 
     except Exception as error:
         logging.exception("VK BOT DOWN!!!", error, exc_info=True)
 
 
 if __name__ == "__main__":
-
-
     main()

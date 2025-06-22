@@ -44,13 +44,12 @@ def main():
     """Main function running code."""
 
     env.read_env()
-    config = {
-        "telegramm_token": env("TELEGRAM_TOKEN"),
-        "telegram_logger": env("TG_BOT_LOGGER_TOKEN"),
-        "telegram_logger_chat_id": env("TG_CHAT_ID"),
-        "project_id": env("PROJECT_ID"),
-        "language_code": env("LANGUAGE_CODE"),
-    }
+    telegramm_token = env("TELEGRAM_TOKEN")
+    telegram_logger = env("TG_BOT_LOGGER_TOKEN")
+    telegram_logger_chat_id = env("TG_CHAT_ID")
+    project_id = env("PROJECT_ID")
+    language_code = env("LANGUAGE_CODE")
+    
 
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s- %(message)s", level=logging.INFO
@@ -58,13 +57,13 @@ def main():
     logger.setLevel(logging.DEBUG)
     logger.addHandler(
         TelegramLogsHandler(
-            config["telegram_logger"], config["telegram_logger_chat_id"]
+            telegram_logger, telegram_logger_chat_id
         )
     )
 
     logger.info("Bot start")
     try:
-        updater = Updater(token=config["telegramm_token"])
+        updater = Updater(token=telegramm_token)
         dispatcher = updater.dispatcher
         dispatcher.add_handler(CommandHandler("start", start))
         dispatcher.add_handler(
@@ -72,8 +71,8 @@ def main():
                 Filters.text & ~Filters.command,
                 partial(
                     response_message,
-                    project_id=config["project_id"],
-                    language_code=config["language_code"],
+                    project_id=project_id,
+                    language_code=language_code,
                 ),
             )
         )

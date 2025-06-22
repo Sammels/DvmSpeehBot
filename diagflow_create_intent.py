@@ -7,7 +7,9 @@ from google.cloud import dialogflow
 
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
-    """Create an intent of the given intent type."""
+    """
+    Create an intent of the given intent type.
+    """
 
     intents_client = dialogflow.IntentsClient()
 
@@ -46,6 +48,9 @@ def main():
     """
     Run main module script
     """
+    env.read_env()
+
+    google_project_id = env("PROJECT_ID")
     parser = create_parser()
     args = parser.parse_args()
     with open(args.filepath, 'r') as intents_file:
@@ -65,6 +70,4 @@ def main():
 
 
 if __name__ == "__main__":
-    env.read_env()
-    google_project_id = env("PROJECT_ID")
     main()
